@@ -16,7 +16,7 @@
 #pragma once
 
 #include "my_miryoku.h"
-#include "keycodes.h"
+#include "my_keycodes.h"
 #include "eeprom.h"
 
 #define LAYOUT_kyria_wrapper(...)  LAYOUT(__VA_ARGS__)

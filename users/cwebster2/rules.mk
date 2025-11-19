@@ -10,4 +10,4 @@ GRAVE_ESC_ENABLE      = no
 LTO_ENABLE = yes
 
 SRC += cwebster2.c
-SRC += keycodes.c
+SRC += my_keycodes.c

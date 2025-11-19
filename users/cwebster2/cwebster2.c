@@ -18,6 +18,8 @@
 userspace_config_t userspace_config;
 
 __attribute__((weak)) void matrix_scan_keymap(void) {}
+__attribute__((weak)) void startup_user(void) {}
+__attribute__((weak)) void keyboard_init(void) {}
 
 void matrix_scan_user(void) {
     static bool has_ran_yet;

@@ -15,10 +15,12 @@
  */
 #pragma once
 
+#include "quantum.h"
 #include QMK_KEYBOARD_H
 
 enum userspace_custom_keycodes {
-    KC_LCCL = SAFE_RANGE,
+    SAFE_RANGE,
+    KC_LCCL,
     NEW_SAFE_RANGE
 };
 

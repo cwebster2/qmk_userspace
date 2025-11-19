@@ -1,7 +1,13 @@
 {
     "userspace_version": "1.0",
     "build_targets": [
-        ["splitkb/kyria/rev1", "cwebster2"],
-        ["ferris/sweep", "cwebster2"]
+        [
+            "splitkb/kyria/rev1",
+            "cwebster2"
+        ],
+        [
+            "ferris/sweep",
+            "cwebster2"
+        ]
     ]
 }
