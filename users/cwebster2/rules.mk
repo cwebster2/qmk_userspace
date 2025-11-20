@@ -8,6 +8,7 @@ CONSOLE_ENABLE = no
 SPACE_CADET_ENABLE    = no
 GRAVE_ESC_ENABLE      = no
 LTO_ENABLE = yes
+CAPS_WORD_ENABLE = yes
 
 SRC += cwebster2.c
 SRC += my_keycodes.c

@@ -19,8 +19,7 @@
 #include QMK_KEYBOARD_H
 
 enum userspace_custom_keycodes {
-    SAFE_RANGE,
-    KC_LCCL,
+    KC_LCCL = QK_USER,
     NEW_SAFE_RANGE
 };
 

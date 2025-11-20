@@ -49,7 +49,7 @@ const uint16_t PROGMEM delR_combo[] = { KC_ENT, KC_BSPC, COMBO_END };
 const uint16_t PROGMEM lprnL_combo[] = { KC_RPRN, KC_UNDS, COMBO_END };
 const uint16_t PROGMEM dotL_combo[] = { KC_0, KC_MINS, COMBO_END };
 const uint16_t PROGMEM muteR_combo[] = { KC_MSTP, KC_MPLY, COMBO_END };
-const uint16_t PROGMEM btn2R_combo[] = { KC_BTN1, KC_BTN3, COMBO_END };
+const uint16_t PROGMEM btn2R_combo[] = { MS_BTN1, MS_BTN3, COMBO_END };
 
 combo_t key_combos[COMBO_COUNT] = {
     [ZX_COPY]  = COMBO(copy_combo, LCTL_T(KC_C)),
@@ -64,7 +64,7 @@ combo_t key_combos[COMBO_COUNT] = {
     [MYL_LPRN] = COMBO(lprnL_combo, KC_LPRN),
     [MYL_DOT] = COMBO(dotL_combo, KC_DOT),
     [MYR_MUTE] = COMBO(muteR_combo, KC_MUTE),
-    [MYR_BTN2] = COMBO(btn2R_combo, KC_BTN2),
+    [MYR_BTN2] = COMBO(btn2R_combo, MS_BTN2),
 };
 #endif
 
