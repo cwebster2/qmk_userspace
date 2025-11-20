@@ -11,20 +11,22 @@ PICO_INTRINSICS_ENABLED = no
 # Build Options
 #   change yes to no to disable
 #
-COMBO_ENABLE = no
+COMBO_ENABLE = yes
 BOOTMAGIC_ENABLE = no       # Enable Bootmagic Lite
 MOUSEKEY_ENABLE = yes        # Mouse keys
 EXTRAKEY_ENABLE = yes       # Audio control and System control
-CONSOLE_ENABLE = no         # Console for debug
+UNICODE_ENABLE = yes        # Unicode
+CONSOLE_ENABLE = yes         # Console for debug
+RGBLIGHT_ENABLE = no       # Enable keyboard RGB underglow
+SPLIT_KEYBOARD = yes        # Use shared split_common code
+SERIAL_DRIVER = vendor
+NKRO_ENABLE = yes           # USB Nkey Rollover
+
+
 COMMAND_ENABLE = no         # Commands for debug and configuration
 # Do not enable SLEEP_LED_ENABLE. it uses the same timer as BACKLIGHT_ENABLE
 SLEEP_LED_ENABLE = no       # Breathing sleep LED during USB suspend
 # if this doesn't work, see here: https://github.com/tmk/tmk_keyboard/wiki/FAQ#nkro-doesnt-work
-NKRO_ENABLE = yes           # USB Nkey Rollover
 BACKLIGHT_ENABLE = no       # Enable keyboard backlight functionality
-RGBLIGHT_ENABLE = no       # Enable keyboard RGB underglow
-UNICODE_ENABLE = yes        # Unicode
 AUDIO_ENABLE = no           # Audio output
-SPLIT_KEYBOARD = yes        # Use shared split_common code
 
-SERIAL_DRIVER = vendor

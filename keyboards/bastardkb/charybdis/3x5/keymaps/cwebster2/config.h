@@ -29,7 +29,7 @@
 
 /* RGB Matrix. */
 
-#ifdef RGB_MATRIX_ENABLE
+#ifdef RGB_MATRIX_ENABLE_OFF
 // Disable control of RGB matrix by keycodes (must use firmware implementation
 // to control the feature).
 #    define RGB_MATRIX_DISABLE_KEYCODES
