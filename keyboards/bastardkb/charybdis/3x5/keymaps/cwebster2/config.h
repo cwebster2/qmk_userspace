@@ -45,7 +45,8 @@
 #endif  // RGB_MATRIX_ENABLE
 
 /* Handedness. */
-#define MASTER_RIGHT
+//#define MASTER_RIGHT
+#define EE_HANDS
 
 #define RP2040_FLASH_AT25SF128A
 
