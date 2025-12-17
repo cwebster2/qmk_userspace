@@ -3,7 +3,13 @@
     "build_targets": [
         [
             "bastardkb/charybdis/3x5/elitec",
-            "cwebster2"
+            "cwebster2",
+            "uf2-split-left"
+        ],
+        [
+            "bastardkb/charybdis/3x5/elitec",
+            "cwebster2",
+            "uf2-split-right"
         ]
     ]
 }
