@@ -45,7 +45,7 @@
 #endif  // RGB_MATRIX_ENABLE
 
 /* Handedness. */
-// #define MASTER_RIGHT
+#define MASTER_RIGHT
 #define EE_HANDS
 
 // #define SOFT_SERIAL_PIN D0
