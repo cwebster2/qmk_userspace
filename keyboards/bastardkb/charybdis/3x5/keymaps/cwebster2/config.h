@@ -46,6 +46,9 @@
 
 /* Handedness. */
 #define MASTER_RIGHT
+#define EE_HANDS
+
+// #define SOFT_SERIAL_PIN D0
 
 #define RP2040_FLASH_AT25SF128A
 
