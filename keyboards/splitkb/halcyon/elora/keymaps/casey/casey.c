@@ -3,7 +3,6 @@
 
 #include QMK_KEYBOARD_H
 
-
 // Include the main display functions so we don't have to initialize the display again
 #include "hlc_tft_display/hlc_tft_display.h"
 
@@ -24,23 +23,24 @@ void keyboard_post_init_user(void) {
     rgb_matrix_sethsv_noeeprom(HSV_BLUE);
 }
 
+static void set_underglow_color(hsv_t hsv) {
+    rgb_t rgb = hsv_to_rgb(hsv);
+    for (uint8_t i = 0; i < 6; i++) {
+        rgb_matrix_set_color(i, rgb.r, rgb.g, rgb.b);
+    }
+}
+
 bool rgb_matrix_indicators_advanced_user(uint8_t led_min, uint8_t led_max) {
     hsv_t hsv = {0, 255, 64};
 
-    // if (get_highest_layer(layer_state|default_layer_state) == 2) {
-    //     hsv = (hsv_t){130, 255, 64};
-    // } else {
-    //     hsv = (hsv_t){30, 255, 64};
-    // }
-
-    switch (get_highest_layer(layer_state)) {
-        case 0:
+    switch (get_highest_layer(layer_state|default_layer_state)) {
+        case _COLEMAK_DH:
             hsv = (hsv_t){HSV_BLUE};
             break;
-        case 1:
+        case _COLEMAK_GAME:
             hsv = (hsv_t){HSV_RED};
             break;
-        case 2:
+        case _QWERTY_GAME:
             hsv = (hsv_t){HSV_RED};
             break;
         default:
@@ -51,10 +51,16 @@ bool rgb_matrix_indicators_advanced_user(uint8_t led_min, uint8_t led_max) {
     if (hsv.v > rgb_matrix_get_val()) {
         hsv.v = rgb_matrix_get_val();
     }
-    rgb_t rgb = hsv_to_rgb(hsv);
 
-    for (uint8_t i = led_min; i < led_max; i++) {
+    // TODO only set underglow
+    set_underglow_color(hsv);
+
+    rgb_t rgb = hsv_to_rgb(hsv);
+    // set per-key colors
+    for (uint8_t i = 6; i < led_max; i++) {
         if (HAS_FLAGS(g_led_config.flags[i], 0x01)) { // 0x01 == LED_FLAG_MODIFIER
+            hsv.s -= 16;
+            rgb = hsv_to_rgb(hsv);
             rgb_matrix_set_color(i, rgb.r, rgb.g, rgb.b);
         }
     }
@@ -87,6 +93,17 @@ bool display_module_housekeeping_task_user(bool second_display) {
             // Draw text on top left corner
             qp_drawtext_recolor(lcd_surface, 0, 0, thintel, text, HSV_WHITE, HSV_BLACK);
 
+            switch (get_highest_layer(layer_state|default_layer_state)) {
+                case _COLEMAK_DH:
+                    qp_drawtext_recolor(lcd_surface, 0, (thintel->line_height)*3, thintel, "COLEMAK", HSV_BLUE, HSV_BLACK);
+                    break;
+                case _COLEMAK_GAME:
+                    qp_drawtext_recolor(lcd_surface, 0, (thintel->line_height)*3, thintel, "COLEMAK GAME", HSV_RED, HSV_BLACK);
+                    break;
+                case _QWERTY_GAME:
+                    qp_drawtext_recolor(lcd_surface, 0, (thintel->line_height)*3, thintel, "QWERTY GAME", HSV_RED, HSV_BLACK);
+                    break;
+            }
             // Make sure to not run this again.
             display_set = true;
         // If it's the secundairy display

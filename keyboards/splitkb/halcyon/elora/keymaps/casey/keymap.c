@@ -4,40 +4,6 @@
 
 #include "casey.h"
 
-enum layers {
-    _COLEMAK_DH = 0,
-    _COLEMAK_GAME,
-    _QWERTY_GAME,
-
-    _NAV,
-    _SYM,
-    _FN,
-    _MOUSE,
-    _MEDIA,
-    _NUM,
-};
-
-#define COLEMAK DF(_COLEMAK_DH)
-#define CMAK_GM DF(_COLEMAK_GAME)
-#define QWTY_GM DF(_QWERTY_GAME)
-
-#define MSE_ESC  LT(_MOUSE, KC_ESC)
-#define NAV_SPC  LT(_NAV, KC_SPC)
-#define MED_TAB  LT(_MEDIA, KC_TAB)
-#define FUN_ENT  LT(_FN, KC_ENT)
-#define NUM_BSP  LT(_NUM, KC_BSPC)
-#define SYM_DEL  LT(_SYM, KC_DEL)
-
-#define HR_A     LGUI_T(KC_A)
-#define HR_R     LALT_T(KC_R)
-#define HR_S     LCTL_T(KC_S)
-#define HR_T     LSFT_T(KC_T)
-
-#define HR_N     LSFT_T(KC_N)
-#define HR_E     LCTL_T(KC_E)
-#define HR_I     LALT_T(KC_I)
-#define HR_O     LGUI_T(KC_O)
-
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
     [_COLEMAK_DH] = LAYOUT_elora_hlc(
@@ -62,7 +28,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
      KC_GRV , KC_1, KC_2, KC_3, KC_4, KC_5 ,                                        KC_6 ,  KC_7 ,  KC_8 ,   KC_9 ,  KC_0 , KC_ESC ,
      KC_TAB , KC_T, KC_Q, KC_W, KC_E, KC_R ,                                        KC_Y,   KC_U ,  KC_I ,   KC_O ,  KC_P , KC_BSPC,
      KC_LCTL, KC_G, KC_A, KC_S, KC_D, KC_F ,                                        KC_H,   KC_J ,  KC_K ,   KC_L ,KC_SCLN, KC_QUOT,
-     KC_LSFT, KC_B, KC_Z, KC_X, KC_C, KC_V ,  KC_LBRC,KC_CAPS,   _______  ,KC_RBRC, KC_N,   KC_M ,KC_COMM, KC_DOT ,KC_SLSH, KC_MINS,
+     KC_LSFT, KC_B, KC_Z, KC_X, KC_C, KC_V ,  KC_LCTL, KC_LALT,   _______, _______, KC_N,   KC_M ,KC_COMM, KC_DOT ,KC_SLSH, KC_MINS,
                KC_EQL, _______, KC_ESC, KC_SPC , KC_TAB   ,     FUN_ENT, NUM_BSP, SYM_DEL, COLEMAK, KC_F12,
      KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO
     ),
