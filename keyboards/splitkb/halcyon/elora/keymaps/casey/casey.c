@@ -33,15 +33,18 @@ static void set_underglow_color(hsv_t hsv) {
 bool rgb_matrix_indicators_advanced_user(uint8_t led_min, uint8_t led_max) {
     hsv_t hsv = {0, 255, 64};
 
+    bool game = false;
     switch (get_highest_layer(layer_state|default_layer_state)) {
         case _COLEMAK_DH:
             hsv = (hsv_t){HSV_BLUE};
             break;
         case _COLEMAK_GAME:
             hsv = (hsv_t){HSV_RED};
+            game = true;
             break;
         case _QWERTY_GAME:
             hsv = (hsv_t){HSV_RED};
+            game = true;
             break;
         default:
             hsv = (hsv_t){HSV_GREEN};
@@ -58,12 +61,40 @@ bool rgb_matrix_indicators_advanced_user(uint8_t led_min, uint8_t led_max) {
     rgb_t rgb = hsv_to_rgb(hsv);
     // set per-key colors
     for (uint8_t i = 6; i < led_max; i++) {
-        if (HAS_FLAGS(g_led_config.flags[i], 0x01)) { // 0x01 == LED_FLAG_MODIFIER
-            hsv.s -= 16;
-            rgb = hsv_to_rgb(hsv);
+        if (HAS_FLAGS(g_led_config.flags[i], 0x04)) { // 0x01 == LED_FLAG_MODIFIER
             rgb_matrix_set_color(i, rgb.r, rgb.g, rgb.b);
         }
     }
+    // red WASD
+    if (game) {
+        hsv = (hsv_t){HSV_RED};
+        rgb = hsv_to_rgb(hsv);
+        rgb_matrix_set_color(20, rgb.r, rgb.g, rgb.b);
+        rgb_matrix_set_color(21, rgb.r, rgb.g, rgb.b);
+        rgb_matrix_set_color(22, rgb.r, rgb.g, rgb.b);
+        rgb_matrix_set_color(27, rgb.r, rgb.g, rgb.b);
+    }
+
+    // dim the non-36 key footprint
+    if (!game) {
+        hsv = (hsv_t){HSV_BLUE};
+        hsv.v = 24;
+        rgb = hsv_to_rgb(hsv);
+        rgb_matrix_set_color(31, rgb.r, rgb.g, rgb.b);
+        rgb_matrix_set_color(32, rgb.r, rgb.g, rgb.b);
+        rgb_matrix_set_color(33, rgb.r, rgb.g, rgb.b);
+        rgb_matrix_set_color(34, rgb.r, rgb.g, rgb.b);
+        rgb_matrix_set_color(35, rgb.r, rgb.g, rgb.b);
+        rgb_matrix_set_color(36, rgb.r, rgb.g, rgb.b);
+        rgb_matrix_set_color(30, rgb.r, rgb.g, rgb.b);
+        rgb_matrix_set_color(24, rgb.r, rgb.g, rgb.b);
+        rgb_matrix_set_color(18, rgb.r, rgb.g, rgb.b);
+        rgb_matrix_set_color(12, rgb.r, rgb.g, rgb.b);
+        rgb_matrix_set_color(11, rgb.r, rgb.g, rgb.b);
+        rgb_matrix_set_color(10, rgb.r, rgb.g, rgb.b);
+        rgb_matrix_set_color(9, rgb.r, rgb.g, rgb.b);
+    }
+
     return false;
 }
 
