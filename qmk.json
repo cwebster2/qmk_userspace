@@ -1,5 +1,5 @@
 {
-    "userspace_version": "1.0",
+    "userspace_version": "1.1",
     "build_targets": [
         [
             "bastardkb/charybdis/3x5/elitec",
@@ -7,7 +7,10 @@
         ],
         [
             "splitkb/halcyon/elora/rev2",
-            "casey"
+            "casey",
+            {
+                "HLC_TFT_DISPLAY": "1"
+            }
         ]
     ]
 }
