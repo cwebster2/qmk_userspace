@@ -22,9 +22,4 @@
 
 #define QMK_KEYS_PER_SCAN 4
 
-#define EE_HANDS
-
-//#define DEBUG_MATRIX_SCAN_RATE
-//#define SPLIT_MODS_ENABLE
-//
 #define RP2040_FLASH_AT25SF128A

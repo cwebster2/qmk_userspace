@@ -14,11 +14,17 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include QMK_KEYBOARD_H
-//#include "raw_hid.h"
-#define RAW_EPSIZE 8
 #include <stdio.h>
 
-#include "cwebster2.h"
+enum layers {
+    _QWERTY = 0,
+    _FN,
+    _SYMBOLS,
+    _NUM,
+    _NAV,
+    _MOUSE,
+    _MEDIA
+};
 
 #ifdef COMBO_ENABLE
 enum combos {
@@ -68,77 +74,54 @@ combo_t key_combos[COMBO_COUNT] = {
 };
 #endif
 
+
 #define LAYOUT_ferris(...)       LAYOUT(__VA_ARGS__)
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 /*
  * Base Layer: QWERTY
  */
-    [_COLEMAK] = LAYOUT_ferris(
- /* ,-----------------------. -----------------------. */
-      _______COLEMAK_L1_____, _______COLEMAK_R1_____,
-      _______COLEMAK_L2_____, _______COLEMAK_R2_____,
-      _______COLEMAK_L3_____, _______COLEMAK_R3_____,
-      ____34_THUMBS_L_______, ____34_THUMBS_R_______
- /*           `---------------------'  `---------------------' */
+    [_QWERTY] = LAYOUT_ferris(
+             KC_Q,         KC_W,         KC_E,         KC_R,  KC_T,    KC_Y,        KC_U,         KC_I,         KC_O,         KC_P,
+      LGUI_T(KC_A), LALT_T(KC_S), LCTL_T(KC_D), LSFT_T(KC_F), KC_G,    KC_H, LSFT_T(KC_J), LCTL_T(KC_K), LALT_T(KC_L), LGUI_T(KC_SCLN),
+             KC_Z,         KC_X,         KC_C,         KC_V,  KC_B,    KC_N,        KC_M,      KC_COMM,       KC_DOT,         KC_SLSH,
+                             LT(_NAV, KC_SPC),  LT(_MEDIA, KC_TAB),    LT(_FN, KC_ENT),  LT(_NUM, KC_BSPC)
     ),
     [_FN] = LAYOUT_ferris(
- /* ,-----------------------.  -----------------------. */
-      _______FN_______L1____,  _______INACTIVE_R1____,
-      _______FN_______L2____,  _______INACTIVE_R2____,
-      _______FN_______L3____,  _______NAV______R2____,
-      ____34_FN________T____,  ____34_INACTIVE__T____
- /*           `---------------------'  `---------------------' */
+      KC_F12,    KC_F7,    KC_F8,    KC_F9,    KC_SYRQ,    KC_NO,   KC_NO,    KC_NO,    KC_NO,    QK_BOOT,
+      KC_F11,    KC_F4,    KC_F5,    KC_F6,    KC_TRNS,    KC_NO,   KC_LSFT,  KC_LCTL,  KC_LALT,  KC_LGUI,
+      KC_F10,    KC_F1,    KC_F2,    KC_F3,    KC_PAUSE,   KC_NO,    KC_NO,    KC_NO,    KC_NO,    KC_NO,
+                                     KC_SPC,   KC_TAB,     KC_ENT,  KC_BSPC
       ),
     [_SYMBOLS] = LAYOUT_ferris(
- /* ,-----------------------.  -----------------------. */
-      _______SYM______L1____,  _______INACTIVE_R1____,
-      _______SYM______L2____,  _______INACTIVE_R2____,
-      _______SYM______L3____,  _______INACTIVE_R3____,
-      ____34_SYM_______T____,  ____34_INACTIVE__T____
- /*           `---------------------'  `---------------------' */
+      KC_RCBR,    KC_AMPR,   KC_ASTR,   KC_LPRN,   KC_LCBR,    KC_NO,   KC_NO,    KC_NO,    KC_NO,    QK_BOOT,
+      KC_COLN,    KC_DLR,    KC_PERC,   KC_CIRC,   KC_PLUS,    KC_NO,   KC_LSFT,  KC_LCTL,  KC_LALT,  KC_LGUI,
+      KC_TILD,    KC_EXLM,   KC_AT,     KC_HASH,   KC_PIPE,    KC_NO,    KC_NO,    KC_NO,    KC_NO,    KC_NO,
+                                        KC_RPRN,   KC_UNDS,    KC_ENT,  KC_BSPC
     ),
     [_NUM] = LAYOUT_ferris(
- /* ,-----------------------. -----------------------. */
-      _______NUM______L1____, _______INACTIVE_R1____,
-      _______NUM______L2____, _______INACTIVE_R2____,
-      _______NUM______L3____, _______INACTIVE_R3____,
-      ____34_NUM_______T____, ____34_INACTIVE__T____
- /*           `---------------------'  `---------------------' */
+      KC_RBRC,   KC_7,    KC_8,    KC_9,    KC_LBRC,   KC_NO,   KC_NO,    KC_NO,    KC_NO,    QK_BOOT,
+      KC_SCLN,   KC_4,    KC_5,    KC_6,    KC_EQL,    KC_NO,   KC_LSFT,  KC_LCTL,  KC_LALT,  KC_LGUI,
+      KC_GRV,    KC_1,    KC_2,    KC_3,    KC_BSLS,   KC_NO,   KC_NO,    KC_NO,    KC_NO,    KC_NO,
+                                   KC_RPRN, KC_MINS,   KC_ENT,  KC_BSPC
       ),
     [_NAV] = LAYOUT_ferris(
- /* ,-----------------------. -----------------------. */
-      _______INACTIVE_L1____, _______NAV______R1____,
-      _______INACTIVE_L2____, _______NAV______R2____,
-      _______INACTIVE_L3____, _______NAV______R3____,
-      ____34_INACTIVE__T____, ____34_NAV_______T____
- /*           `---------------------'  `---------------------' */
+      QK_BOOT,  KC_NO,    KC_NO,    KC_NO,    KC_NO,    KC_UNDO,  KC_CUT,  KC_COPY,  KC_PSTE,  KC_AGIN,
+      KC_LGUI,  KC_LALT,  KC_LCTL,  KC_LSFT,  KC_NO,    KC_LEFT,  KC_DOWN, KC_UP,    KC_RGHT,  CW_TOGG,
+      KC_NO,    KC_NO,    KC_NO,    KC_NO,    KC_NO,    KC_HOME,  KC_PGDN, KC_PGUP,  KC_END,   KC_INS,
+                                    KC_SPC,  KC_TAB,    KC_ENT,  KC_BSPC
       ),
     [_MOUSE] = LAYOUT_ferris(
- /* ,-----------------------. -----------------------. */
-      _______INACTIVE_L1____, _______MOUSE____R1____,
-      _______INACTIVE_L2____, _______MOUSE____R2____,
-      _______INACTIVE_L3____, _______MOUSE____R3____,
-      ____34_INACTIVE__T____, ____34_MOUSE_____T____
- /*           `---------------------'  `---------------------' */
+      QK_BOOT,  KC_NO,    KC_NO,    KC_NO,    KC_NO,    KC_NO,    KC_NO,    KC_NO,    KC_NO,    KC_NO,
+      KC_LGUI,  KC_LALT,  KC_LCTL,  KC_LSFT,  KC_NO,    MS_LEFT,  MS_DOWN,  MS_UP,    MS_RGHT,  KC_NO,
+      KC_NO,    KC_NO,    KC_NO,    KC_NO,    KC_NO,    MS_WHLL,  MS_WHLD,  MS_WHLU,  MS_WHLR,  KC_NO,
+                                    KC_SPC,  KC_TAB,    MS_BTN1,  MS_BTN2
       ),
     [_MEDIA] = LAYOUT_ferris(
- /* ,-----------------------. -----------------------. */
-      _______INACTIVE_L1____, _______MEDIA____R1____,
-      _______INACTIVE_L2____, _______MEDIA____R2____,
-      _______INACTIVE_L3____, _______MEDIA____R3____,
-      ____34_INACTIVE__T____, ____34_MEDIA_____T____
- /*           `---------------------'  `---------------------' */
+      QK_BOOT,  KC_NO,    KC_NO,    KC_NO,    KC_NO,    KC_NO,    KC_NO,    KC_NO,    KC_NO,    KC_NO,
+      KC_LGUI,  KC_LALT,  KC_LCTL,  KC_LSFT,  KC_NO,    KC_MPRV,  KC_VOLD,  KC_VOLU,  KC_MNXT,  KC_NO,
+      KC_NO,    KC_NO,    KC_NO,    KC_NO,    KC_NO,    KC_NO,    KC_NO,    KC_NO,    KC_NO,    KC_NO,
+                                    KC_SPC,  KC_TAB,    KC_MSTP,  KC_MPLY
      ),
 };
-
-#ifdef RAW_ENABLE
-static void send_layer_via_hid(int layer) {
-    uint8_t data[RAW_EPSIZE];
-    data[0] = 1;
-    data[1] = layer;
-    raw_hid_send(data, sizeof(data));
-    return;
-}
-#endif
 
