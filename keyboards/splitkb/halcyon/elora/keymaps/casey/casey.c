@@ -58,6 +58,8 @@ bool rgb_matrix_indicators_advanced_user(uint8_t led_min, uint8_t led_max) {
     // TODO only set underglow
     set_underglow_color(hsv);
 
+    // set some underglow for mods
+
     rgb_t rgb = hsv_to_rgb(hsv);
     // set per-key colors
     for (uint8_t i = 6; i < led_max; i++) {
@@ -65,9 +67,13 @@ bool rgb_matrix_indicators_advanced_user(uint8_t led_min, uint8_t led_max) {
             rgb_matrix_set_color(i, rgb.r, rgb.g, rgb.b);
         }
     }
+
     // red WASD
-    if (game) {
+    if (game && !(is_keyboard_master())) {
         hsv = (hsv_t){HSV_RED};
+        if (hsv.v > rgb_matrix_get_val()) {
+            hsv.v = rgb_matrix_get_val();
+        }
         rgb = hsv_to_rgb(hsv);
         rgb_matrix_set_color(20, rgb.r, rgb.g, rgb.b);
         rgb_matrix_set_color(21, rgb.r, rgb.g, rgb.b);
@@ -79,20 +85,32 @@ bool rgb_matrix_indicators_advanced_user(uint8_t led_min, uint8_t led_max) {
     if (!game) {
         hsv = (hsv_t){HSV_BLUE};
         hsv.v = 24;
+        if (hsv.v > rgb_matrix_get_val()) {
+            hsv.v = rgb_matrix_get_val();
+        }
         rgb = hsv_to_rgb(hsv);
-        rgb_matrix_set_color(31, rgb.r, rgb.g, rgb.b);
-        rgb_matrix_set_color(32, rgb.r, rgb.g, rgb.b);
-        rgb_matrix_set_color(33, rgb.r, rgb.g, rgb.b);
-        rgb_matrix_set_color(34, rgb.r, rgb.g, rgb.b);
-        rgb_matrix_set_color(35, rgb.r, rgb.g, rgb.b);
-        rgb_matrix_set_color(36, rgb.r, rgb.g, rgb.b);
-        rgb_matrix_set_color(30, rgb.r, rgb.g, rgb.b);
+
+        for (uint8_t i = 30; i < 37; i++) {
+            rgb_matrix_set_color(i, rgb.r, rgb.g, rgb.b);
+        }
+        // rgb_matrix_set_color(30, rgb.r, rgb.g, rgb.b);
+        // rgb_matrix_set_color(31, rgb.r, rgb.g, rgb.b);
+        // rgb_matrix_set_color(32, rgb.r, rgb.g, rgb.b);
+        // rgb_matrix_set_color(33, rgb.r, rgb.g, rgb.b);
+        // rgb_matrix_set_color(34, rgb.r, rgb.g, rgb.b);
+        // rgb_matrix_set_color(35, rgb.r, rgb.g, rgb.b);
+        // rgb_matrix_set_color(36, rgb.r, rgb.g, rgb.b);
+
         rgb_matrix_set_color(24, rgb.r, rgb.g, rgb.b);
         rgb_matrix_set_color(18, rgb.r, rgb.g, rgb.b);
-        rgb_matrix_set_color(12, rgb.r, rgb.g, rgb.b);
-        rgb_matrix_set_color(11, rgb.r, rgb.g, rgb.b);
-        rgb_matrix_set_color(10, rgb.r, rgb.g, rgb.b);
-        rgb_matrix_set_color(9, rgb.r, rgb.g, rgb.b);
+
+        for (uint8_t i = 9; i < 13; i++) {
+            rgb_matrix_set_color(i, rgb.r, rgb.g, rgb.b);
+        }
+        // rgb_matrix_set_color(9, rgb.r, rgb.g, rgb.b);
+        // rgb_matrix_set_color(10, rgb.r, rgb.g, rgb.b);
+        // rgb_matrix_set_color(11, rgb.r, rgb.g, rgb.b);
+        // rgb_matrix_set_color(12, rgb.r, rgb.g, rgb.b);
     }
 
     return false;
@@ -109,59 +127,63 @@ bool module_post_init_user(void) {
 }
 
 // This function runs after every matrix scan
-bool display_module_housekeeping_task_user(bool second_display) {
-    // Create checks to see if the displays are set. We don't need to keep updating the display with the same image so this will save some CPU time.
-    static bool display_set = false;
-    static bool second_display_set = false;
-
-    // When the display isn't set, do the following
-    if (!display_set) {
-        // If it's the main display
-        if (!second_display) {
-            // Create text to write
-            static const char *text = "This is a user display!";
-
-            // Draw text on top left corner
-            qp_drawtext_recolor(lcd_surface, 0, 0, thintel, text, HSV_WHITE, HSV_BLACK);
-
-            switch (get_highest_layer(layer_state|default_layer_state)) {
-                case _COLEMAK_DH:
-                    qp_drawtext_recolor(lcd_surface, 0, (thintel->line_height)*3, thintel, "COLEMAK", HSV_BLUE, HSV_BLACK);
-                    break;
-                case _COLEMAK_GAME:
-                    qp_drawtext_recolor(lcd_surface, 0, (thintel->line_height)*3, thintel, "COLEMAK GAME", HSV_RED, HSV_BLACK);
-                    break;
-                case _QWERTY_GAME:
-                    qp_drawtext_recolor(lcd_surface, 0, (thintel->line_height)*3, thintel, "QWERTY GAME", HSV_RED, HSV_BLACK);
-                    break;
-            }
-            // Make sure to not run this again.
-            display_set = true;
-        // If it's the secundairy display
-        } else {
-            // Create text to write
-            static const char *text = "This is a second user display!";
-
-            // Read width from text
-            int16_t width = qp_textwidth(thintel, text);
-
-            // Draw text on bottom right corner
-            qp_drawtext_recolor(lcd_surface, (LCD_WIDTH - width), (LCD_HEIGHT - thintel->line_height), thintel, text, HSV_WHITE, HSV_BLACK);
-
-            // Make sure to not run this again.
-            display_set = true;
-            second_display_set = true;
-        }
-    }
-
-    // Make sure that the second display loads correctly, sometimes it takes a little while for the keyboard to know it has a second display.
-    // So we reset the state and make it run again until the secondary display is drawn correctly
-    if(second_display && !second_display_set) {
-        display_set = false;
-    }
-
-    // Move surface to lcd, this actually writes the content to the physical display
-    qp_surface_draw(lcd_surface, lcd, 0, 0, 0);
-
-    return false;
-}
+// bool display_module_housekeeping_task_user(bool second_display) {
+//     // Create checks to see if the displays are set. We don't need to keep updating the display with the same image so this will save some CPU time.
+//     static bool display_set = false;
+//     static bool second_display_set = false;
+//
+//     // When the display isn't set, do the following
+//     if (!display_set) {
+//         // If it's the main display
+//         if (!second_display) {
+//             // Create text to write
+//             static const char *text = "This is a user display!";
+//
+//             // Draw text on top left corner
+//             qp_drawtext_recolor(lcd_surface, 0, 0, thintel, text, HSV_WHITE, HSV_BLACK);
+//
+//             switch (get_highest_layer(layer_state|default_layer_state)) {
+//                 case _COLEMAK_DH:
+//                     qp_drawtext_recolor(lcd_surface, 0, (thintel->line_height)*3, thintel, "COLEMAK", HSV_BLUE, HSV_BLACK);
+//                     break;
+//                 case _COLEMAK_GAME:
+//                     qp_drawtext_recolor(lcd_surface, 0, (thintel->line_height)*3, thintel, "COLEMAK GAME", HSV_RED, HSV_BLACK);
+//                     break;
+//                 case _QWERTY_GAME:
+//                     qp_drawtext_recolor(lcd_surface, 0, (thintel->line_height)*3, thintel, "QWERTY GAME", HSV_RED, HSV_BLACK);
+//                     break;
+//             }
+//             // test fonts
+//             int y = (thintel->lineheight)*4;
+//             qp_drawtext_recolor(lcd_surface, 0, (thintel->line_height)*3, thintel, "COLEMAK", HSV_BLUE, HSV_BLACK);
+//
+//             // Make sure to not run this again.
+//             display_set = true;
+//         // If it's the secundairy display
+//         } else {
+//             // Create text to write
+//             static const char *text = "This is a second user display!";
+//
+//             // Read width from text
+//             int16_t width = qp_textwidth(thintel, text);
+//
+//             // Draw text on bottom right corner
+//             qp_drawtext_recolor(lcd_surface, (LCD_WIDTH - width), (LCD_HEIGHT - thintel->line_height), thintel, text, HSV_WHITE, HSV_BLACK);
+//
+//             // Make sure to not run this again.
+//             display_set = true;
+//             second_display_set = true;
+//         }
+//     }
+//
+//     // Make sure that the second display loads correctly, sometimes it takes a little while for the keyboard to know it has a second display.
+//     // So we reset the state and make it run again until the secondary display is drawn correctly
+//     if(second_display && !second_display_set) {
+//         display_set = false;
+//     }
+//
+//     // Move surface to lcd, this actually writes the content to the physical display
+//     qp_surface_draw(lcd_surface, lcd, 0, 0, 0);
+//
+//     return false;
+// }
